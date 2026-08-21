@@ -46,6 +46,29 @@ export default class CommentStore {
           this.comments.unshift(comment);
         });
       });
+
+      this.hubConnection.on('EditComment', (editedComment: ChatComment) => {
+        runInAction(() => {
+          editedComment.createdAt = new Date(editedComment.createdAt);
+
+          if (editedComment.updatedAt) {
+            editedComment.updatedAt = new Date(editedComment.updatedAt);
+          }
+
+          const index = this.comments.findIndex(
+            (x) => x.id === editedComment.id,
+          );
+          if (index !== -1) {
+            this.comments[index] = editedComment;
+          }
+        });
+      });
+
+      this.hubConnection.on('DeleteComment', (id: number) => {
+        runInAction(() => {
+          this.comments = this.comments.filter((x) => x.id !== id);
+        });
+      });
     }
   };
 
@@ -64,6 +87,22 @@ export default class CommentStore {
     values.activityId = store.activityStore.selectedActivity?.id;
     try {
       await this.hubConnection?.invoke('SendComment', values);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  editComment = async (id: number, body: string) => {
+    try {
+      await this.hubConnection?.invoke('EditComment', { id, body });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  deleteComment = async (id: number) => {
+    try {
+      await this.hubConnection?.invoke('DeleteComment', { id });
     } catch (error) {
       console.log(error);
     }
