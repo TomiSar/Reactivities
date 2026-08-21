@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers(opt => 
+builder.Services.AddControllers(opt =>
 {
     var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
     opt.Filters.Add(new AuthorizeFilter(policy));
@@ -31,6 +31,13 @@ app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
 app.UseXfo(opt => opt.Deny());
 app.UseCsp(opt => opt
     .BlockAllMixedContent()
+        .ConnectSources(s => s.Self().CustomSources(
+        "https://api.cloudinary.com",
+        "http://localhost:5000",
+        "https://localhost:5001",
+        "ws://localhost:5000",
+        "wss://localhost:5001"
+    ))
     .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com"))
     .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
     .FormActions(s => s.Self())
@@ -44,9 +51,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-else 
+else
 {
-    app.Use(async (context, next) => 
+    app.Use(async (context, next) =>
     {
         context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
         await next.Invoke();
