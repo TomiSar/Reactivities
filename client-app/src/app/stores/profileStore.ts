@@ -165,14 +165,20 @@ export default class ProfileStore {
             ? this.profile.followingCount++
             : this.profile.followingCount--;
         }
-        this.followings.forEach((profile) => {
-          if (profile.username === username) {
-            profile.following
-              ? profile.followersCount--
-              : profile.followersCount++;
-            profile.following = !profile.following;
-          }
-        });
+        if (this.activeTab === 4 && !following) {
+          this.followings = this.followings.filter(
+            (p) => p.username !== username,
+          );
+        } else {
+          this.followings.forEach((profile) => {
+            if (profile.username === username) {
+              profile.following
+                ? profile.followersCount--
+                : profile.followersCount++;
+              profile.following = !profile.following;
+            }
+          });
+        }
         this.loading = false;
       });
     } catch (error) {
