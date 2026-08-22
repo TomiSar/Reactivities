@@ -88,6 +88,7 @@ const ChatCommentItem = observer(function ChatCommentItem({
 }) {
   const { commentStore, userStore } = useStore();
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [editBody, setEditBody] = useState(comment.body);
   const isOwner = userStore.user?.username === comment.username;
 
@@ -108,8 +109,15 @@ const ChatCommentItem = observer(function ChatCommentItem({
   const createdTime = renderTime(comment.createdAt) || 'some time ago';
   const updatedTime = renderTime(comment.updatedAt);
 
+  /* Optimistic updates, component is automatically destroyed if the deletion succeeds. */
+  const handleDeleteComment = async (id: number) => {
+    setIsDeleting(true);
+    await commentStore.deleteComment(id);
+    setIsDeleting(false);
+  };
+
   return (
-    <Comment>
+    <Comment style={{ opacity: isDeleting ? 0.5 : 1.0 }}>
       <Comment.Avatar src={comment.image || '/assets/user.png'} />
       <Comment.Content>
         {isOwner && (
@@ -128,13 +136,17 @@ const ChatCommentItem = observer(function ChatCommentItem({
               style={{ cursor: 'pointer', marginRight: '5px' }}
               onClick={() => setIsEditing(!isEditing)}
             />
-            <Icon
-              name='trash'
-              color='red'
-              size='large'
-              style={{ cursor: 'pointer' }}
-              onClick={() => commentStore.deleteComment(comment.id)}
-            />
+            {isDeleting ? (
+              <Loader active inline size='mini' />
+            ) : (
+              <Icon
+                name='trash'
+                color='red'
+                size='large'
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleDeleteComment(comment.id)}
+              />
+            )}
           </div>
         )}
         <Comment.Author as={Link} to={`/profiles/${comment.username}`}>

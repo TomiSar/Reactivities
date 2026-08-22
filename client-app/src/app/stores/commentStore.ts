@@ -6,6 +6,7 @@ import {
 import { makeAutoObservable, runInAction } from 'mobx';
 import { ChatComment } from '../models/comment';
 import { store } from './store';
+import { showErrorToast } from '../../utils/helpers';
 
 export default class CommentStore {
   comments: ChatComment[] = [];
@@ -89,6 +90,7 @@ export default class CommentStore {
       await this.hubConnection?.invoke('SendComment', values);
     } catch (error) {
       console.log(error);
+      showErrorToast('Send', error);
     }
   };
 
@@ -97,14 +99,25 @@ export default class CommentStore {
       await this.hubConnection?.invoke('EditComment', { id, body });
     } catch (error) {
       console.log(error);
+      showErrorToast('Edit', error);
     }
   };
 
   deleteComment = async (id: number) => {
+    const originalComments = [...this.comments];
+
     try {
+      runInAction(() => {
+        this.comments = this.comments.filter((x) => x.id !== id);
+      });
+
       await this.hubConnection?.invoke('DeleteComment', { id });
     } catch (error) {
       console.log(error);
+      runInAction(() => {
+        this.comments = originalComments;
+      });
+      showErrorToast('Delete', error);
     }
   };
 }

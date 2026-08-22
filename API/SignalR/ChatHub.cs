@@ -15,9 +15,16 @@ namespace API.SignalR
 
         public async Task SendComment(Create.Command command)
         {
-            var comment = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            await Clients.Group(command.ActivityId.ToString()).SendAsync("ReceiveComment", comment.Value);
+            if (result.IsSuccess)
+            {
+                await Clients.Group(command.ActivityId.ToString()).SendAsync("ReceiveComment", result.Value);
+            }
+            else if (!string.IsNullOrEmpty(result.Error))
+            {
+                throw new HubException(result.Error);
+            }
         }
 
         public async Task EditComment(Edit.Command command)
@@ -31,6 +38,10 @@ namespace API.SignalR
             {
                 await Clients.Group(activityId.ToString()).SendAsync("EditComment", result.Value);
             }
+            else if (!string.IsNullOrEmpty(result.Error))
+            {
+                throw new HubException(result.Error);
+            }
         }
 
         public async Task DeleteComment(Delete.Command command)
@@ -43,6 +54,10 @@ namespace API.SignalR
             if (result.IsSuccess)
             {
                 await Clients.Group(activityId.ToString()).SendAsync("DeleteComment", result.Value);
+            }
+            else if (!string.IsNullOrEmpty(result.Error))
+            {
+                throw new HubException(result.Error);
             }
         }
 

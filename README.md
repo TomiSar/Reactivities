@@ -4,8 +4,6 @@ This has been rewritten from scratch to take advantage of and to make it (hopefu
 
 # Running the project
 
-You can see a live demo of this project [here](https://reactivities.trycatchlearn.com/).
-
 To get into the app you will need to sign up with a valid email account or just use GitHub login as email verification is part of the app functionality in the published version of the app.
 
 You can also run this app locally. The easiest way to do this without needing a database server is to use the version of the app before publishing which does not require a valid email address or Sql Server. Most of the functionality will work except for the photo upload which would require you to sign up to Cloudinary (free) and use your own API keys here. You need to have the following installed on your computer for this to work:
@@ -36,7 +34,26 @@ cd client-app
 npm install
 ```
 
-3. If you wish for the photo upload to work create a file called appsettings.json in the Reactivities/API folder and copy/paste the following configuration.
+3. Setup Postgres Database create a file called appsettings.Development.json in the Reactivities/API folder and copy/paste the following configuration.
+
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Information"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost; Port=5432; User Id={USERNAME}; Password={PASSWORD}; Database={DATABASE}"
+  },
+  "TokenKey": "{TOKENKEY}"
+}
+```
+
+4. If you wish for the photo upload to work create a file called appsettings.json in the Reactivities/API folder and copy/paste the following configuration.
+
+Create an account (free of charge, no credit card required) at https://cloudinary.com and then replace the Cloudinary keys in the appsettings.json file with your own cloudinary keys.
 
 ```json
 {
@@ -47,15 +64,13 @@ npm install
     }
   },
   "CloudinarySettings": {
-    "CloudName": "CLOUD_NAME",
-    "ApiKey": "API_KEY",
-    "ApiSecret": "API_SECRET"
+    "CloudName": "{CLOUD_NAME}",
+    "ApiKey": "{API_KEY}",
+    "ApiSecret": "{API_SECRET}"
   },
   "AllowedHosts": "*"
 }
 ```
-
-4. Create an account (free of charge, no credit card required) at https://cloudinary.com and then replace the Cloudinary keys in the appsettings.json file with your own cloudinary keys.
 
 5. You can then run the app and browse to it locally by running:
 
@@ -77,8 +92,27 @@ npm run start
 
    password: Pa$$w0rd
 
-# Legacy repositories
+## Database Migrations
 
-This repo contains the latest version code for the course released in February 2025. If you want to see the historical and legacy code for prior versions of the course then please visit:
+Whenever you make changes to the data models in the `Domain` project, you need to generate a new migration and apply it to the PostgreSQL database.
 
-[.Net 7/React 18](https://github.com/TryCatchLearn/Reactivities-net7react18)
+### Add a New Migration
+
+Generates the boilerplate C# code required to update the database schema. Run this command from the solution root directory Reactivities:
+
+```bash
+dotnet ef migrations add MigrationName -p Persistence -s API
+```
+
+- `-p Persistence`: Specifies the target project where the migration files will be created.
+- `-s API`: Specifies the startup project containing the configuration and connection string.
+
+### Update the Database after migration
+
+Applies all pending migrations to your local PostgreSQL database instance:
+
+```bash
+dotnet ef database update -p Persistence -s API
+```
+
+_Note: The application is also configured to run migrations automatically on startup via `context.Database.MigrateAsync()` in `Program.cs`._

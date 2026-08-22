@@ -30,7 +30,7 @@ namespace Application.Comments
                     .Include(x => x.Author)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
 
-                if (comment == null) return null;
+                if (comment == null) return Result<int>.Failure("Comment not found");
 
                 if (comment.Author.UserName != _userAccessor.GetUsername())
                     return Result<int>.Failure("You can only delete your own comments");

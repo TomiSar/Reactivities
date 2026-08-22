@@ -51,7 +51,10 @@ export default class ProfileStore {
         this.loadingProfile = false;
       });
     } catch (error) {
-      toast.error('Problem loading profile');
+      toast.error('Problem loading profile', {
+        position: 'top-right',
+        autoClose: 2000,
+      });
       runInAction(() => {
         this.loadingProfile = false;
       });
@@ -116,7 +119,10 @@ export default class ProfileStore {
         }
       });
     } catch (error) {
-      toast.error('Problem deleting photo');
+      toast.error('Problem deleting photo', {
+        position: 'top-right',
+        autoClose: 2000,
+      });
       this.loading = false;
     }
   };

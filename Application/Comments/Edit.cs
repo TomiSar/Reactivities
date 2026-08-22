@@ -44,7 +44,7 @@ namespace Application.Comments
                     .ThenInclude(p => p.Photos)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
 
-                if (comment == null) return null;
+                if (comment == null) return Result<CommentDto>.Failure("Comment not found");
 
                 if (comment.Author.UserName != _userAccessor.GetUsername())
                     return Result<CommentDto>.Failure("You can only edit your own comments");
