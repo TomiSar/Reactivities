@@ -32,7 +32,7 @@ namespace Application.Profiles
                     .OrderBy(a => a.Activity.Date)
                     .ProjectTo<UserActivityDto>(_mapper.ConfigurationProvider)
                     .AsQueryable();
-                
+
                 var today = DateTime.UtcNow;
 
                 query = request.Predicate switch

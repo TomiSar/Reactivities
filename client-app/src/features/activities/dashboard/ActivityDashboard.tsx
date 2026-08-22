@@ -21,7 +21,7 @@ export default observer(function ActivityDashboard() {
 
     useEffect(() => {
         loadActivities();
-    }, [loadActivities])
+    }, [loadActivities]);
 
     return (
         <Grid>
@@ -32,15 +32,15 @@ export default observer(function ActivityDashboard() {
                         <ActivityListItemPlaceholder />
                     </>
                 ) : (
-                        <InfiniteScroll
-                            pageStart={0}
-                            loadMore={handleGetNext}
-                            hasMore={!loadingNext && !!pagination && pagination.currentPage < pagination.totalPages}
-                            initialLoad={false}
-                        >
-                            <ActivityList />
-                        </InfiniteScroll>
-                    )}
+                    <InfiniteScroll
+                        pageStart={0}
+                        loadMore={handleGetNext}
+                        hasMore={!loadingNext && !!pagination && pagination.currentPage < pagination.totalPages}
+                        initialLoad={false}
+                    >
+                        <ActivityList />
+                    </InfiniteScroll>
+                )}
             </Grid.Column>
             <Grid.Column width='6'>
                 <ActivityFilters />
@@ -49,5 +49,5 @@ export default observer(function ActivityDashboard() {
                 <Loader active={loadingNext} />
             </Grid.Column>
         </Grid>
-    )
-})
+    );
+});

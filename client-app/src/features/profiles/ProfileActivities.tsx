@@ -4,22 +4,17 @@ import { Tab, Grid, Header, Card, Image, TabProps } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { UserActivity } from '../../app/models/profile';
 import { format } from 'date-fns';
-import { useStore } from "../../app/stores/store";
+import { useStore } from '../../app/stores/store';
 
 const panes = [
     { menuItem: 'Future Events', pane: { key: 'future' } },
     { menuItem: 'Past Events', pane: { key: 'past' } },
-    { menuItem: 'Hosting', pane: { key: 'hosting' } }
+    { menuItem: 'Hosting', pane: { key: 'hosting' } },
 ];
 
 export default observer(function ProfileActivities() {
     const { profileStore } = useStore();
-    const {
-        loadUserActivities,
-        profile,
-        loadingActivities,
-        userActivities
-    } = profileStore;
+    const { loadUserActivities, profile, loadingActivities, userActivities } = profileStore;
 
     useEffect(() => {
         loadUserActivities(profile!.username);
@@ -44,11 +39,7 @@ export default observer(function ProfileActivities() {
                     <br />
                     <Card.Group itemsPerRow={4}>
                         {userActivities.map((activity: UserActivity) => (
-                            <Card
-                                as={Link}
-                                to={`/activities/${activity.id}`}
-                                key={activity.id}
-                            >
+                            <Card as={Link} to={`/activities/${activity.id}`} key={activity.id}>
                                 <Image
                                     src={`/assets/categoryImages/${activity.category}.jpg`}
                                     style={{ minHeight: 100, objectFit: 'cover' }}

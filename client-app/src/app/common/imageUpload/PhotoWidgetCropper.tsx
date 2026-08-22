@@ -19,7 +19,7 @@ export default function PhotoWidgetCropper({ imagePreview, setCropper }: Props) 
             viewMode={1}
             autoCropArea={1}
             background={false}
-            onInitialized={cropper => setCropper(cropper)}
+            onInitialized={(cropper) => setCropper(cropper)}
         />
-    )
+    );
 }

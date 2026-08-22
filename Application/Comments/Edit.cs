@@ -12,7 +12,7 @@ namespace Application.Comments
     {
         public class Command : IRequest<Result<CommentDto>>
         {
-          public int Id { get; set; }
+            public int Id { get; set; }
             public string Body { get; set; }
         }
 

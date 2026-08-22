@@ -5,7 +5,9 @@ import { Header, Menu } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 
 export default observer(function ActivityFilters() {
-    const {activityStore: {predicate, setPredicate}} = useStore();
+    const {
+        activityStore: { predicate, setPredicate },
+    } = useStore();
     return (
         <>
             <Menu vertical size='large' style={{ width: '100%', marginTop: 25 }}>
@@ -27,9 +29,7 @@ export default observer(function ActivityFilters() {
                 />
             </Menu>
             <Header />
-            <Calendar
-                onChange={(date: any) => setPredicate('startDate', date as Date)}
-            />
+            <Calendar onChange={(date: any) => setPredicate('startDate', date as Date)} />
         </>
-    )
-})
+    );
+});
