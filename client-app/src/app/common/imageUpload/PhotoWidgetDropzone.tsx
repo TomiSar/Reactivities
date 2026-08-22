@@ -1,9 +1,13 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Header, Icon } from 'semantic-ui-react';
 
 interface Props {
-    setFiles: (files: any) => void;
+    setFiles: (files: FileWithPreview[]) => void;
+}
+
+interface FileWithPreview extends File {
+    preview: string;
 }
 
 export default function PhotoUploadWidgetDropzone({ setFiles }: Props) {
@@ -12,7 +16,7 @@ export default function PhotoUploadWidgetDropzone({ setFiles }: Props) {
         borderColor: '#eee',
         borderRadius: '5px',
         paddingTop: '30px',
-        textAlign: 'center' as 'center',
+        textAlign: 'center' as const,
         height: '200px',
     };
 
@@ -21,12 +25,13 @@ export default function PhotoUploadWidgetDropzone({ setFiles }: Props) {
     };
 
     const onDrop = useCallback(
-        (acceptedFiles: any) => {
+        (acceptedFiles: File[]) => {
             setFiles(
-                acceptedFiles.map((file: any) =>
-                    Object.assign(file, {
-                        preview: URL.createObjectURL(file),
-                    }),
+                acceptedFiles.map(
+                    (file) =>
+                        Object.assign(file, {
+                            preview: URL.createObjectURL(file),
+                        }) as FileWithPreview,
                 ),
             );
         },

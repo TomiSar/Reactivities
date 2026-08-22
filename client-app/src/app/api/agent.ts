@@ -37,7 +37,7 @@ axios.interceptors.response.use(
         const { data, status, config } = error.response as AxiosResponse;
         switch (status) {
             case 400:
-                if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
+                if (config.method === 'get' && Object.prototype.hasOwnProperty.call(data.errors, 'id')) {
                     router.navigate('/not-found');
                 }
                 if (data.errors) {
@@ -72,8 +72,8 @@ axios.interceptors.response.use(
 
 const requests = {
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),
-    post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
-    put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
+    post: <T>(url: string, body: object) => axios.post<T>(url, body).then(responseBody),
+    put: <T>(url: string, body: object) => axios.put<T>(url, body).then(responseBody),
     del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
 
@@ -96,7 +96,7 @@ const Account = {
 const Profiles = {
     get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
     uploadPhoto: (file: any) => {
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append('File', file);
         return axios.post<Photo>('photos', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },

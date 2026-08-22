@@ -86,6 +86,14 @@ npm run start
 
 ```
 
+5. Run ESLint that statically analyzes your code to quickly find problems. Fix errors and warnings that occur.
+
+```bash
+cd client-app
+npm run lint
+npm run lint-fix
+```
+
 6. You can then browse to the app on https://localhost:3000 and login with either of the test users:
 
    email: bob@test.com or tom@test.com or jane@test.com

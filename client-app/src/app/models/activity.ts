@@ -18,12 +18,12 @@ export interface Activity {
 
 export class ActivityFormValues {
     id?: string = undefined;
-    title: string = '';
-    category: string = '';
-    description: string = '';
+    title = '';
+    category = '';
+    description = '';
     date: Date | null = null;
-    city: string = '';
-    venue: string = '';
+    city = '';
+    venue = '';
 
     constructor(activity?: ActivityFormValues) {
         if (activity) {
