@@ -8,7 +8,7 @@ To get into the app you will need to sign up with a valid email account or just 
 
 You can also run this app locally. The easiest way to do this without needing a database server is to use the version of the app before publishing which does not require a valid email address or Sql Server. Most of the functionality will work except for the photo upload which would require you to sign up to Cloudinary (free) and use your own API keys here. You need to have the following installed on your computer for this to work:
 
-1. .Net SDK v7 or v8, NodeJS (at least version 18+ or 20+), git
+1. .Net SDK v8, NodeJS (at least version 18+ or 20+), git
 
 Once you have these then you can do the following:
 

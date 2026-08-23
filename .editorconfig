@@ -1,9 +1,11 @@
 [*.cs]
-indent_size = 4
+# unnecessary usings-warning (IDE0005)
+dotnet_diagnostic.IDE0005.severity = warning
 # Sort usings alphabetically and remove unnecessary
 dotnet_style_qualification_for_field = false:silent
 dotnet_style_qualification_for_property = false:silent
 dotnet_style_require_accessor_appearance = always:suggestion
+indent_size = 4
 
 # C# formatting rules
 csharp_new_line_before_open_brace = all
