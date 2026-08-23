@@ -8,9 +8,7 @@ To get into the app you will need to sign up with a valid email account or just 
 
 You can also run this app locally. The easiest way to do this without needing a database server is to use the version of the app before publishing which does not require a valid email address or Sql Server. Most of the functionality will work except for the photo upload which would require you to sign up to Cloudinary (free) and use your own API keys here. You need to have the following installed on your computer for this to work:
 
-1. .Net SDK v7 or v8
-2. NodeJS (at least version 18+ or 20+)
-3. git
+1. .Net SDK v7 or v8, NodeJS (at least version 18+ or 20+), git
 
 Once you have these then you can do the following:
 
@@ -52,8 +50,7 @@ npm install
 ```
 
 4. If you wish for the photo upload to work create a file called appsettings.json in the Reactivities/API folder and copy/paste the following configuration.
-
-Create an account (free of charge, no credit card required) at https://cloudinary.com and then replace the Cloudinary keys in the appsettings.json file with your own cloudinary keys.
+   Create an account (free of charge, no credit card required) at https://cloudinary.com and then replace the Cloudinary keys in the appsettings.json file with your own cloudinary keys.
 
 ```json
 {
