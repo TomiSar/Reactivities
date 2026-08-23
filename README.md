@@ -15,7 +15,6 @@ Once you have these then you can do the following:
 1. Clone the project in a User folder on your computer by running:
 
 ```bash
-# you will of course need git installed to run this
 git clone https://github.com/TomiSar/Reactivities.git
 cd Reactivities
 ```
@@ -121,3 +120,24 @@ dotnet ef database update -p Persistence -s API
 ```
 
 _Note: The application is also configured to run migrations automatically on startup via `context.Database.MigrateAsync()` in `Program.cs`._
+
+## Database Schema
+
+![Database Schema](database_schema.png)
+
+### Database Schema Architecture
+
+The database is divided into two main areas: **Core Application Logic** and **Identity Management (ASP.NET Core Identity)**.
+
+#### 1. Core Application Tables
+
+- **`Activities`**: Stores all the events created in the system, including core details like title, description, date, and location.
+- **`ActivityAttendees`**: A join table establishing a Many-to-Many relationship between users (`AspNetUsers`) and events (`Activities`). It tracks which users are participating and who is the host of the event (`IsHost = true`).
+- **`Comments`**: Contains user comments left on activities. Each comment is linked to a single activity (`ActivityId`) and owned by a specific user (`AuthorId`).
+- **`Photos`**: Manages user profile pictures stored via Cloudinary. Each photo belongs to a user, and the `IsMain` boolean flag specifies their active profile picture.
+- **`UserFollowings`**: Enables the social follow/unfollow system. It self-references the user table by mapping the follower (`ObserverId`) to the followed user (`TargetId`).
+
+#### 2. Identity & Authentication Tables
+
+- **`AspNetUsers`**: Holds core user credentials, extended with custom fields like `DisplayName` and `Bio`.
+- All other `AspNet*` tables (`AspNetRoles`, `AspNetUserRoles`, `AspNetUserClaims`, etc.) handle built-in security, role-based access control, external authentication providers (e.g., GitHub login), and session tokens automatically.
