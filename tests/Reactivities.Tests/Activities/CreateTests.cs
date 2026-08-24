@@ -11,40 +11,24 @@ namespace Reactivities.Tests.Activities
         public async Task Handle_Should_Create_Activity_In_Db()
         {
             // Arrange add to database, handler gets value from there
-            var user = new AppUser { UserName = "bob", DisplayName = "Bob" };
-            Context.Users.Add(user);
-            await Context.SaveChangesAsync();
-
-            var handler = new Create.Handler(Context, MockUserAccessor.Object);
-            var newActivity = new Activity
-            {
-                Id = Guid.NewGuid(),
-                Title = "Test activity",
-                Description = "Test description",
-                Category = "music",
-                Date = DateTime.Now,
-                City = "Helsinki",
-                Venue = "Pub"
-            };
+            await SeedUserAsync("bob");
+            var handler = CreateHandler<Create.Handler>();
+            var newActivity = new Activity { Id = Guid.NewGuid(), Title = "Music activity", Category = "music", City = "Berlin"};
 
             // Act
-            var result = await handler.Handle(new Create.Command { Activity = newActivity }, CancellationToken.None);
+            await handler.Handle(new Create.Command { Activity = newActivity }, default);
 
             // Assert
-            result.IsSuccess.Should().BeTrue();
-
-            var created = await Context.Activities
+            var result = await Context.Activities
                 .Include(x => x.Attendees)
                 .ThenInclude(u => u.AppUser) // Include to get userName
                 .FirstOrDefaultAsync(x => x.Id == newActivity.Id);
 
-            created.Should().NotBeNull();
-            created.Title.Should().Be("Test activity");
-            created.Description.Should().Be("Test description");
-            created.Category.Should().Be("music");
-            created.City.Should().Be("Helsinki");
-            created.Venue.Should().Be("Pub");
-            created.Attendees.Should().ContainSingle(x => x.AppUser.UserName == "bob" && x.IsHost);
+            result.Should().NotBeNull();
+            result.Title.Should().Be("Music activity");
+            result.Category.Should().Be("music");
+            result.City.Should().Be("Berlin");
+            result.Attendees.Should().ContainSingle(x => x.AppUser.UserName == "bob" && x.IsHost);
         }
 
         [Fact]

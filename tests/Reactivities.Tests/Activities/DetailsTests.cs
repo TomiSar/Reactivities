@@ -1,5 +1,4 @@
 ﻿using Application.Activities;
-using Domain;
 using FluentAssertions;
 
 namespace Reactivities.Tests.Activities
@@ -11,25 +10,22 @@ namespace Reactivities.Tests.Activities
         {
             // Arrange
             var activityId = Guid.NewGuid();
-            Context.Activities.Add(new Activity { Id = activityId, Title = "New activity" });
-            await Context.SaveChangesAsync();
-
-            var handler = new Details.Handler(Context, Mapper, MockUserAccessor.Object);
-
+            await SeedActivityAsync(id: activityId, title: "New activity");
+            var handler = CreateHandler<Details.Handler>();
             // Act
             var result = await handler.Handle(new Details.Query { Id = activityId }, CancellationToken.None);
 
             // Assert
-            result.IsSuccess.Should().BeTrue();
             result.Value.Title.Should().Be("New activity");
             result.Value.Id.Should().Be(activityId);
+            result.IsSuccess.Should().BeTrue();
         }
 
         [Fact]
         public async Task Handle_Should_Return_Null_Value_When_Id_Does_Not_Exist()
         {
             // Arrange
-            var handler = new Details.Handler(Context, Mapper, MockUserAccessor.Object);
+            var handler = CreateHandler<Details.Handler>();
 
             // Act
             var result = await handler.Handle(new Details.Query { Id = Guid.NewGuid() }, CancellationToken.None);

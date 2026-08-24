@@ -10,11 +10,9 @@ namespace Reactivities.Tests.Activities
         public async Task Handle_Should_Return_List_Of_Activities()
         {
             // Arrange
-            Context.Activities.Add(new Activity { Title = "Activity 1", Date = DateTime.Now.AddDays(1) });
-            Context.Activities.Add(new Activity { Title = "Activity 2", Date = DateTime.Now.AddDays(2) });
-            await Context.SaveChangesAsync();
-
-            var handler = new List.Handler(Context, Mapper, MockUserAccessor.Object);
+            await SeedActivityAsync(title: "Activity 1", date: DateTime.Now.AddDays(1));
+            await SeedActivityAsync(title: "Activity 2", date: DateTime.Now.AddDays(2));
+            var handler = CreateHandler<List.Handler>();
 
             // Act
             var result = await handler.Handle(new List.Query { Params = new ActivityParams() }, CancellationToken.None);
@@ -28,34 +26,19 @@ namespace Reactivities.Tests.Activities
         public async Task Handle_Should_Filter_By_IsGoing()
         {
             // Arrange
-            var user = new AppUser { UserName = "bob", DisplayName = "Bob" };
-            Context.Users.Add(user);
+            var user = await SeedUserAsync("bob");
+            var activity = await SeedActivityAsync(title: "I am going", date: DateTime.Now.AddDays(1));
 
-            // Going and not Host
-            var activityGoing = new Activity
-            {
-                Id = new Guid(),
-                Title = "I am going",
-                Date = DateTime.Now.AddDays(1),
-                Attendees = new List<ActivityAttendee> { new ActivityAttendee { AppUser = user, IsHost = false } }
-            };
-
-            // Not Going
-            var activityNotGoing = new Activity
-            {
-                Id = new Guid(),
-                Title = "I am not going",
-                Date = DateTime.Now.AddDays(2),
-            };
-
-            Context.Activities.AddRange(activityGoing, activityNotGoing);
+            // Lisätään osallistuminen (tätä varten voisi tehdä myöhemmin SeedAttendance-metodin)
+            activity.Attendees.Add(new ActivityAttendee { AppUser = user, IsHost = false });
             await Context.SaveChangesAsync();
 
-            var handler = new List.Handler(Context, Mapper, MockUserAccessor.Object);
+            await SeedActivityAsync(title: "I am not going", date: DateTime.Now.AddDays(2));
 
-            // Act IsGoing = true
-            var queryParams = new ActivityParams { IsGoing = true, IsHost = false };
-            var result = await handler.Handle(new List.Query { Params = queryParams }, CancellationToken.None);
+            var handler = CreateHandler<List.Handler>();
+
+            // Act
+            var result = await handler.Handle(new List.Query { Params = new ActivityParams { IsGoing = true, IsHost = false } }, CancellationToken.None);
 
             // Assert
             result.Value.Count.Should().Be(1);
@@ -66,20 +49,14 @@ namespace Reactivities.Tests.Activities
         public async Task Handle_Should_Filter_By_IsHost()
         {
             // Arrange
-            var user = new AppUser { UserName = "bob", DisplayName = "Bob" };
-            Context.Users.Add(user);
+            var user = await SeedUserAsync("bob");
+            var activity = await SeedActivityAsync(title: "Bob birthday party", date: DateTime.Now.AddDays(1));
 
-            var activity = new Activity
-            {
-                Title = "Bob birthday party",
-                Date = DateTime.Now.AddDays(1),
-                Attendees = new List<ActivityAttendee> { new ActivityAttendee { AppUser = user, IsHost = true } }
-            };
-            Context.Activities.Add(activity);
-            Context.Activities.Add(new Activity { Title = "Random party", Date = DateTime.Now.AddDays(1) });
+            activity.Attendees.Add(new ActivityAttendee { AppUser = user, IsHost = true });
             await Context.SaveChangesAsync();
 
-            var handler = new List.Handler(Context, Mapper, MockUserAccessor.Object);
+            await SeedActivityAsync(title: "Random party", date: DateTime.Now.AddDays(2));
+            var handler = CreateHandler<List.Handler>();
 
             // Act
             var result = await handler.Handle(new List.Query { Params = new ActivityParams { IsHost = true } }, CancellationToken.None);

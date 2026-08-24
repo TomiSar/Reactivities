@@ -4,6 +4,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+
 namespace Application.Profiles
 {
     public class Edit

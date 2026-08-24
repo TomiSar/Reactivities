@@ -33,11 +33,8 @@ namespace Application.Profiles
                     .ProjectTo<Profile>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
                     .SingleOrDefaultAsync(x => x.Username == request.Username);
 
-                if (user == null) return null;
-
                 return Result<Profile>.Success(user);
             }
         }
     }
 }
-

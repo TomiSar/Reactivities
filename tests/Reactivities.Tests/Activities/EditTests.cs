@@ -10,22 +10,19 @@ namespace Reactivities.Tests.Activities
         public async Task Handle_Should_Update_Activity_When_Id_Is_Valid()
         {
             // Arrange
-            var id = Guid.NewGuid();
-            var originalActivity = new Activity { Id = id, Title = "Original title", Description = "Original description" };
-            Context.Activities.Add(originalActivity);
-            await Context.SaveChangesAsync();
+            var activity = await SeedActivityAsync();
+            var handler = CreateHandler<Edit.Handler>();
 
-            var handler = new Edit.Handler(Context, Mapper);
-            var updatedActivity = new Activity { Id = id, Title = "Updated title", Description = "Updated description" };
+            var updatedActivity = new Activity { Id = activity.Id, Title = "Updated title", Description = "Updated description" };
 
             // Act
             var result = await handler.Handle(new Edit.Command { Activity = updatedActivity}, CancellationToken.None);
 
             // Assert
-            result.IsSuccess.Should().BeTrue();
-            var activityInDb = await Context.Activities.FindAsync(id);
+            var activityInDb = await Context.Activities.FindAsync(activity.Id);
             activityInDb?.Title.Should().Be("Updated title");
             activityInDb?.Description.Should().Be("Updated description");
+            result.IsSuccess.Should().BeTrue();
         }
 
         [Fact]
@@ -50,7 +47,7 @@ namespace Reactivities.Tests.Activities
         public async Task Handle_Should_Return_Null_When_Id_Is_Invalid()
         {
             // Arrange
-            var handler = new Edit.Handler(Context, Mapper);
+            var handler = CreateHandler<Edit.Handler>();
 
             // Act
             var result = await handler.Handle(new Edit.Command { Activity = new Activity { Id = Guid.NewGuid() }}, CancellationToken.None);
