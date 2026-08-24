@@ -1,5 +1,12 @@
 import { toast } from 'react-toastify';
 
+export const showSuccessToast = (successMessage: string) => {
+    toast.success(`${successMessage} successfully`, {
+        position: 'top-right',
+        autoClose: 2000,
+    });
+};
+
 export const showErrorToast = (toastMessage: string, error: unknown) => {
     toast.error(`${toastMessage} failed: ${getErrorMessage(error)}`, {
         position: 'top-right',

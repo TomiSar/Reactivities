@@ -29,7 +29,7 @@ axios.interceptors.response.use(
         const pagination = response.headers['pagination'];
         if (pagination) {
             response.data = new PaginatedResult(response.data, JSON.parse(pagination));
-            return response as AxiosResponse<PaginatedResult<any>>;
+            return response as AxiosResponse<PaginatedResult<unknown>>;
         }
         return response;
     },
@@ -95,7 +95,7 @@ const Account = {
 
 const Profiles = {
     get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
-    uploadPhoto: (file: any) => {
+    uploadPhoto: (file: Blob) => {
         const formData = new FormData();
         formData.append('File', file);
         return axios.post<Photo>('photos', formData, {

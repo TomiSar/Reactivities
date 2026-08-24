@@ -1,10 +1,9 @@
 import { Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { Button } from 'semantic-ui-react';
-import MyTextArea from '../../app/common/form/MyTextArea';
-import MyTextInput from '../../app/common/form/MyTextInput';
-import { useStore } from '../../app/stores/store';
 import * as Yup from 'yup';
+import TextInput from '../../app/common/form/TextInput';
+import { useStore } from '../../app/stores/store';
 
 interface Props {
     setEditMode: (editMode: boolean) => void;
@@ -31,8 +30,8 @@ export default observer(function ProfileEditForm({ setEditMode }: Props) {
         >
             {({ isSubmitting, isValid, dirty }) => (
                 <Form className='ui form'>
-                    <MyTextInput placeholder='Display Name' name='displayName' />
-                    <MyTextArea rows={3} placeholder='Add your bio' name='bio' />
+                    <TextInput placeholder='Display Name' name='displayName' />
+                    <TextInput rows={3} placeholder='Add your bio' name='bio' />
                     <Button
                         positive
                         type='submit'

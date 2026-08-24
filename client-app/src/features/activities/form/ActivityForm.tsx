@@ -1,25 +1,23 @@
+import { Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Header, Segment } from 'semantic-ui-react';
-import LoadingComponent from '../../../app/layout/LoadingComponent';
-import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
-import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import MyTextInput from '../../../app/common/form/MyTextInput';
-import MyTextArea from '../../../app/common/form/MyTextArea';
-import MySelectInput from '../../../app/common/form/MySelectInput';
-import { categoryOptions } from '../../../app/common/options/categoryOptions';
 import MyDateInput from '../../../app/common/form/MyDateInput';
+import MySelectInput from '../../../app/common/form/MySelectInput';
+import TextInput from '../../../app/common/form/TextInput';
+import { categoryOptions } from '../../../app/common/options/categoryOptions';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { ActivityFormValues } from '../../../app/models/activity';
+import { useStore } from '../../../app/stores/store';
 
 export default observer(function ActivityForm() {
     const { activityStore } = useStore();
     const { createActivity, updateActivity, loadActivity, loadingInitial } = activityStore;
     const { id } = useParams();
     const navigate = useNavigate();
-
     const [activity, setActivity] = useState<ActivityFormValues>(new ActivityFormValues());
 
     const validationSchema = Yup.object({
@@ -60,8 +58,8 @@ export default observer(function ActivityForm() {
             >
                 {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                     <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                        <MyTextInput name='title' placeholder='Title' />
-                        <MyTextArea rows={3} name='description' placeholder='Description' />
+                        <TextInput name='title' placeholder='Title' />
+                        <TextInput rows={3} name='description' placeholder='Description' />
                         <MySelectInput options={categoryOptions} name='category' placeholder='Category' />
                         <MyDateInput
                             name='date'
@@ -72,8 +70,8 @@ export default observer(function ActivityForm() {
                         />
 
                         <Header content='Location Details' sub color='teal' />
-                        <MyTextInput name='venue' placeholder='Venue' />
-                        <MyTextInput name='city' placeholder='city' />
+                        <TextInput name='venue' placeholder='Venue' />
+                        <TextInput name='city' placeholder='city' />
                         <Button
                             disabled={isSubmitting || !dirty || !isValid}
                             loading={isSubmitting}

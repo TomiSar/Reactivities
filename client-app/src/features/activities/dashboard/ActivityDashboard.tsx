@@ -15,6 +15,7 @@ export default observer(function ActivityDashboard() {
 
     function handleGetNext() {
         setLoadingNext(true);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         setPagingParams(new PagingParams(pagination!.currentPage + 1));
         loadActivities().then(() => setLoadingNext(false));
     }

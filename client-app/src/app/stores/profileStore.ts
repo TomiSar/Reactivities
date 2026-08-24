@@ -1,7 +1,9 @@
-import { Photo, Profile, UserActivity } from '../models/profile';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { makeAutoObservable, reaction, runInAction } from 'mobx';
-import agent from '../api/agent';
 import { toast } from 'react-toastify';
+import { showErrorToast, showSuccessToast } from '../../utils/helpers';
+import agent from '../api/agent';
+import { Photo, Profile, UserActivity } from '../models/profile';
 import { store } from './store';
 
 export default class ProfileStore {
@@ -51,13 +53,10 @@ export default class ProfileStore {
                 this.loadingProfile = false;
             });
         } catch (error) {
-            toast.error('Problem loading profile', {
-                position: 'top-right',
-                autoClose: 2000,
-            });
             runInAction(() => {
                 this.loadingProfile = false;
             });
+            showErrorToast('Profile loading', error);
         }
     };
 
@@ -76,9 +75,11 @@ export default class ProfileStore {
                 }
                 this.uploading = false;
             });
+            showSuccessToast('Profile photo uploaded');
         } catch (error) {
             console.log(error);
             runInAction(() => (this.uploading = false));
+            showErrorToast('Profile photo upload', error);
         }
     };
 
@@ -95,9 +96,11 @@ export default class ProfileStore {
                     this.loading = false;
                 }
             });
+            showSuccessToast('Profile main photo updated');
         } catch (error) {
             console.log(error);
             runInAction(() => (this.loading = false));
+            showErrorToast('Profile main update', error);
         }
     };
 
@@ -116,12 +119,14 @@ export default class ProfileStore {
                     store.userStore.setImage('');
                 }
             });
+            showSuccessToast('Profile photo deleted');
         } catch (error) {
             toast.error('Problem deleting photo', {
                 position: 'top-right',
                 autoClose: 2000,
             });
             this.loading = false;
+            showErrorToast('Profile photo deletion', error);
         }
     };
 
@@ -136,9 +141,11 @@ export default class ProfileStore {
                 this.profile = { ...this.profile, ...(profile as Profile) };
                 this.loading = false;
             });
+            showSuccessToast('Profile updated');
         } catch (error) {
             console.log(error);
             runInAction(() => (this.loading = false));
+            showErrorToast('Profile update', error);
         }
     };
 

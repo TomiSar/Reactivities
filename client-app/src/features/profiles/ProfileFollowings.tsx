@@ -1,7 +1,8 @@
-import { Tab, Grid, Header, Card } from 'semantic-ui-react';
-import ProfileCard from './ProfileCard';
-import { useStore } from '../../app/stores/store';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { observer } from 'mobx-react-lite';
+import { Card, Grid, Header, Tab } from 'semantic-ui-react';
+import { useStore } from '../../app/stores/store';
+import ProfileCard from './ProfileCard';
 
 export default observer(function ProfileFollowings() {
     const { profileStore } = useStore();

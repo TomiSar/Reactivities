@@ -1,4 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
+import { showSuccessToast } from '../../utils/helpers';
 import agent from '../api/agent';
 import { User, UserFormValues } from '../models/user';
 import { router } from '../router/Routes';
@@ -21,6 +22,7 @@ export default class UserStore {
         runInAction(() => (this.user = user));
         router.navigate('/activities');
         store.modalStore.closeModal();
+        showSuccessToast('User logged in');
     };
 
     register = async (creds: UserFormValues) => {
@@ -29,6 +31,7 @@ export default class UserStore {
         runInAction(() => (this.user = user));
         router.navigate('/activities');
         store.modalStore.closeModal();
+        showSuccessToast('User registrated');
     };
 
     logout = () => {

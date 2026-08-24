@@ -1,9 +1,9 @@
-import React from 'react';
 import { useField } from 'formik';
-import { Form, Label } from 'semantic-ui-react';
 import DatePicker, { ReactDatePickerProps } from 'react-datepicker';
+import { Form, Label } from 'semantic-ui-react';
 
 export default function MyDateInput(props: Partial<ReactDatePickerProps>) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const [field, meta, helpers] = useField(props.name!);
     return (
         <Form.Field error={meta.touched && !!meta.error}>

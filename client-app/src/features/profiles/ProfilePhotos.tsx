@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { SyntheticEvent, useState } from 'react';
-import { Card, Header, Tab, Image, Grid, Button } from 'semantic-ui-react';
+import { Button, Card, Grid, Header, Image, Tab } from 'semantic-ui-react';
 import PhotoUploadWidget from '../../app/common/imageUpload/PhotoUploadWidget';
 import { Photo, Profile } from '../../app/models/profile';
 import { useStore } from '../../app/stores/store';
@@ -16,7 +16,7 @@ export default observer(function ProfilePhotos({ profile }: Props) {
     const [addPhotoMode, setAddPhotoMode] = useState(false);
     const [target, setTarget] = useState('');
 
-    function handlePhotoUpload(file: any) {
+    function handlePhotoUpload(file: Blob) {
         uploadPhoto(file).then(() => setAddPhotoMode(false));
     }
 

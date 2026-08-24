@@ -1,8 +1,8 @@
+import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Button, Grid, Header } from 'semantic-ui-react';
-import { observer } from 'mobx-react-lite';
-import PhotoUploadWidgetDropzone from './PhotoWidgetDropzone';
 import PhotoWidgetCropper from './PhotoWidgetCropper';
+import PhotoUploadWidgetDropzone from './PhotoWidgetDropzone';
 
 interface Props {
     loading: boolean;
@@ -15,6 +15,7 @@ export default observer(function PhotoUploadWidget({ loading, uploadPhoto }: Pro
 
     function onCrop() {
         if (cropper) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             cropper.getCroppedCanvas().toBlob((blob) => uploadPhoto(blob!));
         }
     }

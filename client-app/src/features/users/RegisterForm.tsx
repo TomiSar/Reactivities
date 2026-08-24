@@ -1,12 +1,12 @@
 import { ErrorMessage, Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { Button, Header } from 'semantic-ui-react';
-import MyTextInput from '../../app/common/form/MyTextInput';
-import { useStore } from '../../app/stores/store';
 import * as Yup from 'yup';
+import TextInput from '../../app/common/form/TextInput';
+import { useStore } from '../../app/stores/store';
 import ValidationError from '../errors/ValidationError';
 
-export default observer(function RegsiterForm() {
+export default observer(function RegisterForm() {
     const { userStore } = useStore();
     return (
         <Formik
@@ -24,10 +24,10 @@ export default observer(function RegsiterForm() {
             {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
                 <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>
                     <Header as='h2' content='Sign up to Reactivities' color='teal' textAlign='center' />
-                    <MyTextInput placeholder='Display Name' name='displayName' />
-                    <MyTextInput placeholder='Username' name='username' />
-                    <MyTextInput placeholder='Email' name='email' />
-                    <MyTextInput placeholder='Password' name='password' type='password' />
+                    <TextInput placeholder='Display Name' name='displayName' />
+                    <TextInput placeholder='Username' name='username' />
+                    <TextInput placeholder='Email' name='email' />
+                    <TextInput placeholder='Password' name='password' type='password' />
                     <ErrorMessage name='error' render={() => <ValidationError errors={errors.error} />} />
                     <Button
                         disabled={!isValid || !dirty || isSubmitting}

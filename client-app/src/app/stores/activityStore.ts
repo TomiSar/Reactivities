@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { makeAutoObservable, reaction, runInAction } from 'mobx';
-import { Activity, ActivityFormValues } from '../models/activity';
+import { showErrorToast, showSuccessToast } from '../../utils/helpers';
 import agent from '../api/agent';
-import { store } from './store';
-import { Profile } from '../models/profile';
+import { Activity, ActivityFormValues } from '../models/activity';
 import { Pagination, PagingParams } from '../models/pagination';
+import { Profile } from '../models/profile';
+import { store } from './store';
 
 export default class ActivityStore {
     activityRegistry = new Map<string, Activity>();
@@ -157,8 +159,10 @@ export default class ActivityStore {
             newActivity.attendees = [profile];
             this.setActivity(newActivity);
             runInAction(() => (this.selectedActivity = newActivity));
+            showSuccessToast('Activity created');
         } catch (error) {
             console.log(error);
+            showErrorToast('Activity creation', error);
         }
     };
 
@@ -175,8 +179,10 @@ export default class ActivityStore {
                     this.selectedActivity = updatedActivity as Activity;
                 }
             });
+            showSuccessToast('Activity updated');
         } catch (error) {
             console.log(error);
+            showErrorToast('Activity updation', error);
         }
     };
 
@@ -188,11 +194,13 @@ export default class ActivityStore {
                 this.activityRegistry.delete(id);
                 this.loading = false;
             });
+            showSuccessToast('Activity deleted');
         } catch (error) {
             console.log(error);
             runInAction(() => {
                 this.loading = false;
             });
+            showErrorToast('Activity deletion', error);
         }
     };
 
