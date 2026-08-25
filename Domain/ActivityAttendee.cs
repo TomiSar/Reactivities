@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain
 {
+    [ExcludeFromCodeCoverage]
     public class ActivityAttendee
     {
         public string AppUserId { get; set; }

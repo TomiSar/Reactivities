@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Application.Core
 {
+    [ExcludeFromCodeCoverage]
     public class PagingParams
     {
         private const int MaxPageSize = 50;

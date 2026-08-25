@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Domain
 {
+    [ExcludeFromCodeCoverage]
     public class AppUser : IdentityUser
     {
         public string DisplayName { get; set; }

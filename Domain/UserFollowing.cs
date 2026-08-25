@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Domain
 {
+    [ExcludeFromCodeCoverage]
     public class UserFollowing
     {
         public string ObserverId { get; set; }

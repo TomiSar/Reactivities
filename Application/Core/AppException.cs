@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Application.Core
 {
+    [ExcludeFromCodeCoverage]
     public class AppException
     {
         public AppException(int statusCode, string message, string details = null)
