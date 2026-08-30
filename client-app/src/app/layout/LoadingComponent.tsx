@@ -1,4 +1,3 @@
-import React from 'react';
 import { Dimmer, Loader } from 'semantic-ui-react';
 
 interface Props {
@@ -8,7 +7,7 @@ interface Props {
 
 export default function LoadingComponent({ inverted = true, content = 'Loading...' }: Props) {
     return (
-        <Dimmer active={true} inverted={inverted}>
+        <Dimmer active={true} inverted={inverted} page={true}>
             <Loader content={content} />
         </Dimmer>
     );

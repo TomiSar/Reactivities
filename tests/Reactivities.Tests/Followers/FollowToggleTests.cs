@@ -82,7 +82,7 @@ namespace Reactivities.Tests.Followers
 
             using var failingContext = new FailingDataContext(options);
 
-            // Luodaan käyttäjät kantaan (ShouldFail = false)
+            // Luodaan kï¿½yttï¿½jï¿½t kantaan (ShouldFail = false)
             var bob = new AppUser { Id = "1", UserName = "bob", DisplayName = "Bob" };
             var jane = new AppUser { Id = "2", UserName = "jane", DisplayName = "Jane" };
             failingContext.Users.AddRange(bob, jane);
@@ -91,7 +91,7 @@ namespace Reactivities.Tests.Followers
             // Aktivoidaan virhe tallennukseen
             failingContext.ShouldFail = true;
 
-            // Varmistetaan että MockUserAccessor palauttaa bobin
+            // Varmistetaan ettï¿½ MockUserAccessor palauttaa bobin
             MockUserAccessor.Setup(x => x.GetUsername()).Returns("bob");
 
             var handler = new FollowToggle.Handler(failingContext, MockUserAccessor.Object);

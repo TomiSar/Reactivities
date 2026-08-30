@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button, Container, Header, Image, Segment } from 'semantic-ui-react';
 import { useStore } from '../../app/stores/store';
 import LoginForm from '../users/LoginForm';
-import RegsiterForm from '../users/RegisterForm';
+import RegisterForm from '../users/RegisterForm';
 
 export default observer(function HomePage() {
     const { userStore, modalStore } = useStore();
@@ -16,17 +16,17 @@ export default observer(function HomePage() {
                 </Header>
                 {userStore.isLoggedIn ? (
                     <>
-                        <Header as='h2' inverted content={`Welcome back ${userStore.user?.displayName}`} />
+                        <Header as='h2' inverted content={`Welcome ${userStore.user?.username}`} />
                         <Button as={Link} to='/activities' size='huge' inverted>
-                            Go to activities!
+                            Go to activities
                         </Button>
                     </>
                 ) : (
                     <>
                         <Button onClick={() => modalStore.openModal(<LoginForm />)} size='huge' inverted>
-                            Login!
+                            Login
                         </Button>
-                        <Button onClick={() => modalStore.openModal(<RegsiterForm />)} size='huge' inverted>
+                        <Button onClick={() => modalStore.openModal(<RegisterForm />)} size='huge' inverted>
                             Register
                         </Button>
                     </>

@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-export const showSuccessToast = (successMessage: string) => {
+export const showSuccessToast = (successMessage: string, extraProp?: string) => {
     toast.success(`${successMessage} successfully`, {
         position: 'top-right',
         autoClose: 2000,
